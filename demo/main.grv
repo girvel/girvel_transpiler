@@ -5,6 +5,7 @@ struct Vector {
     int y;
 }
 
+// TODO struct construction
 int Vector::one() {
     1
 }

@@ -38,4 +38,6 @@ LITERAL: SIGNED_INT | ESCAPED_STRING
 %import common.CNAME
 %import common.ESCAPED_STRING
 %import common.SIGNED_INT
+%import common.CPP_COMMENT
 %ignore WS
+%ignore CPP_COMMENT
