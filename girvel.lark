@@ -10,16 +10,16 @@ module_element: include
 include: "include" ESCAPED_STRING
 
 generic_include: "include" "<" generic_include_assignment ("," generic_include_assignment)* ">" ESCAPED_STRING
-generic_include_assignment: CNAME "=" type_name
+generic_include_assignment: CNAME ":" type_name
 
 generic: "generic" CNAME
 
-function_definition: signature expression
-signature: type_name function_name arguments
+function_definition: signature "=>" expression
+signature:  function_name ":" type_name arguments
 function_name: (type_name "::")? CNAME _generic_postfix?
 arguments: "(" variable_definition? ("," variable_definition)* ","? ")"
 
-struct_definition: "struct" type_name "{" (variable_definition ";")* "}"
+struct_definition: type_name ":" "struct" "{" (variable_definition ";")* "}"
 type_name: CNAME _generic_postfix?
 
 _generic_postfix: "<" CNAME ("," CNAME)* ">"

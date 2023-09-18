@@ -1,16 +1,9 @@
 include "stdio.h"
-include<T = int> "./vector.grv"
+include<T: int> "./vector.grv"
 // TODO .h files generation
 
-// TODO maybe:
-// let main = int(a, b, c): (let x = 2; x)
-// or:
-// let main = int() => (let x = 2; x)
-// or even:
-// let main = () => (let x = 2; x)
-
-int main() {
-    Vector<int> v = Vector::one<int>();
+main: int() => {
+    Vector<int> v = Vector<int>::one();
     printf("v.y is %d\n", v.y);
     0
 }

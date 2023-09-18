@@ -93,7 +93,7 @@ class GirvelInterpreter(Interpreter):
         ))
 
     @v_args(True)
-    def signature(self, return_type, name, arguments):
+    def signature(self, name, return_type, arguments):
         return f"{self.visit(return_type)} {self.visit(name)}{self.visit(arguments)}"
 
     def function_name(self, tree):

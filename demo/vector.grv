@@ -1,8 +1,8 @@
 generic T
 
-struct Vector<T> {
+Vector<T>: struct {
     T x;
     T y;
 }
 
-Vector<T> Vector::one<T>() Vector<T> {1, 1}
+Vector<T>::one: Vector<T>() => Vector<T> {1, 1}
