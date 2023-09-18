@@ -18,6 +18,7 @@ block: "{" (statement ";")* expression "}"
 statement: expression
     | variable_definition
     | variable_assignment
+    | variable_declaration
     | return
 expression: block
     | if
@@ -29,6 +30,7 @@ expression: block
 
 variable_definition: CNAME CNAME
 variable_assignment: identifier "=" expression
+variable_declaration: CNAME identifier "=" expression
 return: "return" expression
 
 identifier: identifier_piece ("." identifier_piece)*

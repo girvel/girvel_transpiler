@@ -15,7 +15,10 @@ int max(int a, int b) {
 }
 
 int main() {
+    int x = 3;
+
     printf("Hello, %d!\n", max(3, 4));
     printf("v.x is %d\n", Vector::one().x);
+    printf("x is %d\n", x);
     0
 }

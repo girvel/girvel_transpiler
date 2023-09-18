@@ -83,6 +83,10 @@ class GirvelInterpreter(Interpreter):
         lvalue, rvalue = self.visit_children(tree)
         return f"{lvalue} = {rvalue}"
 
+    def variable_declaration(self, tree):
+        type_, lvalue, rvalue = self.visit_children(tree)
+        return f"{type_} {lvalue} = {rvalue}"
+
     @v_args(True)
     def return_(self, expression):
         return f"return {self.visit(expression)}"
