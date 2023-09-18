@@ -19,7 +19,7 @@ parser.set_defaults(func=lambda args: parser.print_help())
 subparsers = parser.add_subparsers()
 
 
-def run(args):
+def build(args):
     path = args.directory / "main.grv"
     source = path.read_text()
 
@@ -31,12 +31,23 @@ def run(args):
         sys.stderr.write(f"\n{ex}\n")
         exit(1)
 
-    (args.directory / '.build').mkdir(exist_ok=True)
-    (args.directory / '.build/main.c').write_text(transpiled_code)
+    build_dir = args.directory / '.build'
+
+    build_dir.mkdir(exist_ok=True)
+    (build_dir / 'main.c').write_text(transpiled_code)
 
     sys.stderr.write(f"\t{colored('Running', 'green', attrs=['bold'])} {path.parent.name}\n")
     sys.stderr.write("\n")
-    os.system(f'gcc -std=c11 {args.directory / ".build/main.c"}')
+
+    os.system(f'gcc -std=c11 {build_dir / "main.c"}')
+
+parser_run = subparsers.add_parser("build", help="Build an executable file starting from main.grv in given directory")
+parser_run.add_argument("directory", default=".", nargs="?", type=Path, help="directory to build")
+parser_run.set_defaults(func=build)
+
+
+def run(args):
+    build(args)
     os.system('./a.out')
 
 parser_run = subparsers.add_parser("run", help="Run main.grv in given directory")
