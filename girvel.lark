@@ -1,6 +1,9 @@
 start: module
 
-module: (include | function_definition)*
+module: module_element*
+module_element: include
+    | function_definition
+    | struct_definition
 
 include: "include" ESCAPED_STRING
 
@@ -8,10 +11,17 @@ function_definition: signature block
 signature: CNAME CNAME arguments
 arguments: "(" variable_definition? ("," variable_definition)* ","? ")"
 
-variable_definition: CNAME CNAME
+struct_definition: "struct" CNAME "{" (variable_definition ";")* "}"
 
-block: "{" expression (";" expression)* "}"
-expression: if | operation | call | CNAME | LITERAL
+block: "{" statement (";" statement)* "}"
+statement: expression
+    | variable_definition
+    | variable_assignment
+expression: if | operation | call | identifier | LITERAL
+
+variable_definition: CNAME CNAME
+variable_assignment: identifier "=" expression
+identifier: CNAME ("." CNAME)*
 
 if: "if" expression block "else" block
 

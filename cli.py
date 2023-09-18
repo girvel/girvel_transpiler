@@ -1,6 +1,5 @@
 import sys
 from argparse import ArgumentParser
-from pathlib import Path
 
 import os
 from pathlib import Path
@@ -18,7 +17,6 @@ parser = ArgumentParser(
 parser.set_defaults(func=lambda args: parser.print_help())
 
 subparsers = parser.add_subparsers()
-
 
 
 def run(args):
