@@ -22,11 +22,19 @@ class GirvelInterpreter(Interpreter):
 
     @v_args(True)
     def function_definition(self, signature, block):
-        return (
-            f"\n{self.visit(signature)} {{" +
-            _indent(f"\nreturn {self.visit(block)};") +
-            f"\n}}\n"
-        )
+        *code, ret = self.visit_children(block)
+
+        if len(code) == 0:
+            block_content = _indent("\nreturn {};".format(ret))
+        else:
+            block_content = _indent("\n{};\n\nreturn {};".format(
+                ";\n".join(code), ret
+            ))
+
+        return ("\n{} {{{}\n}}\n".format(
+            self.visit(signature),
+            block_content
+        ))
 
     @v_args(True)
     def signature(self, return_type, name, arguments):
