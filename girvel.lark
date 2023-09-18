@@ -1,14 +1,16 @@
 start: function_definition
 function_definition: signature block
 signature: CNAME CNAME arguments
-arguments: "(" var_def ("," var_def)* ")"
+arguments: "(" variable_definition ("," variable_definition)* ")"
 
 block: "{" expression (";" expression)* "}"
 expression: if | operation | CNAME
-if: "if" expression block ("else" block)?
-operation: CNAME INFIX_OPERATOR CNAME
-var_def: CNAME CNAME
 
+if: "if" expression block ("else" block)?
+
+variable_definition: CNAME CNAME
+
+operation: CNAME INFIX_OPERATOR CNAME
 INFIX_OPERATOR: ">"
 
 %import common.WS

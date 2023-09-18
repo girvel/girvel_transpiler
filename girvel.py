@@ -6,4 +6,4 @@ from lark import Lark
 parser = Lark(Path("girvel.lark").read_text())
 
 if __name__ == '__main__':
-    print(parser.parse(Path("demo.grv").read_text()).pretty())
+    print(parser.parse(Path("main.grv").read_text()).pretty())
