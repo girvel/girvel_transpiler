@@ -24,6 +24,8 @@ class GirvelInterpreter(Interpreter):
 
     @v_args(True)
     def include(self, target):
+        if target.endswith('.grv"'):
+            target = target[:-5] + '.c"'
         return f"#include {target}\n"
 
     @v_args(True)

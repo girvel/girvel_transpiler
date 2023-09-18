@@ -1,6 +1,9 @@
 include "stdio.h"
-// include "./vector.grv"
+include "./vector.grv"
+// TODO .h files generation
 
 int main() {
+    Vector v = Vector {0, 1};
+    printf("v.y is %d\n", v.y);
     0
 }
