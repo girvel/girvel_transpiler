@@ -4,7 +4,7 @@ from typing import Iterator
 from lark import Lark
 from lark.visitors import Interpreter, v_args
 
-parser = Lark(Path("girvel.lark").read_text())
+parser = Lark((Path(__file__).parent / "girvel.lark").read_text())
 
 def _indent(code):
     if isinstance(code, Iterator):
@@ -27,7 +27,7 @@ class GirvelInterpreter(Interpreter):
         return f"#include {target}\n"
 
     @v_args(True)
-    def function_definition(self, signature, expression):  # TODO one-line function definition
+    def function_definition(self, signature, expression):
         *code, ret = self.visit_children(expression)
 
         if len(code) == 0:

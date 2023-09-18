@@ -19,8 +19,8 @@ parser.set_defaults(func=lambda args: parser.print_help())
 subparsers = parser.add_subparsers()
 
 
-def run(args):  # TODO fix path
-    path = Path("demo/main.grv")
+def run(args):
+    path = args.directory / "main.grv"
     source = path.read_text()
 
     sys.stderr.write(f"\t{colored('Transpiling', 'green', attrs=['bold'])} {path.parent.name}\n")
@@ -31,12 +31,12 @@ def run(args):  # TODO fix path
         sys.stderr.write(f"\n{ex}\n")
         exit(1)
 
-    Path('demo/.build').mkdir(exist_ok=True)
-    Path('demo/.build/main.c').write_text(transpiled_code)
+    (args.directory / '.build').mkdir(exist_ok=True)
+    (args.directory / '.build/main.c').write_text(transpiled_code)
 
     sys.stderr.write(f"\t{colored('Running', 'green', attrs=['bold'])} {path.parent.name}\n")
     sys.stderr.write("\n")
-    os.system('gcc -std=c11 demo/.build/main.c')
+    os.system(f'gcc -std=c11 {args.directory / ".build/main.c"}')
     os.system('./a.out')
 
 parser_run = subparsers.add_parser("run", help="Run main.grv in given directory")
