@@ -5,9 +5,9 @@ struct Vector {
     int y;
 }
 
-// TODO struct construction
-int Vector::one() {
-    1
+// TODO returns
+Vector Vector::one() {
+    Vector {1, 1}
 }
 
 int max(int a, int b) {
@@ -16,6 +16,6 @@ int max(int a, int b) {
 
 int main() {
     printf("Hello, %d!\n", max(3, 4));
-    printf("v.x is %d\n", Vector::one());
+    printf("v.x is %d\n", Vector::one().x);
     0
 }

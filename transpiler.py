@@ -26,7 +26,6 @@ class GirvelInterpreter(Interpreter):
     def include(self, target):
         return f"#include {target}\n"
 
-    # TODO comments
     @v_args(True)
     def function_definition(self, signature, block):  # TODO one-line function definition
         *code, ret = self.visit_children(block)
@@ -100,6 +99,14 @@ class GirvelInterpreter(Interpreter):
     def call(self, tree):
         function, *arguments = self.visit_children(tree)
         return f"{function}({', '.join(arguments)})"
+
+    def constructor(self, tree):
+        struct, *elements = self.visit_children(tree)
+        return (
+            "({"
+            + _indent(f"\n{struct} _ = {{{', '.join(elements)}}};\n_;") +
+            "\n})"
+        )
 
 setattr(GirvelInterpreter, "if", GirvelInterpreter.if_)
 del GirvelInterpreter.if_

@@ -18,7 +18,12 @@ block: "{" statement (";" statement)* "}"
 statement: expression
     | variable_definition
     | variable_assignment
-expression: if | operation | call | identifier | LITERAL
+expression: if
+    | operation
+    | call
+    | identifier
+    | constructor
+    | LITERAL
 
 variable_definition: CNAME CNAME
 variable_assignment: identifier "=" expression
@@ -31,6 +36,8 @@ operation: CNAME INFIX_OPERATOR CNAME
 INFIX_OPERATOR: ">"
 
 call: function_name "(" expression? ("," expression)* ","? ")"
+
+constructor: CNAME "{" expression? ("," expression)* ","? "}"
 
 LITERAL: SIGNED_INT | ESCAPED_STRING
 
