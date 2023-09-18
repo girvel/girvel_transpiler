@@ -98,6 +98,12 @@ class GirvelInterpreter(Interpreter):
     def return_(self, expression):
         return f"return {self.visit(expression)}"
 
+    def break_(self, tree):
+        return "break"
+
+    def continue_(self, tree):
+        return "continue"
+
     def identifier(self, tree):
         elements = self.visit_children(tree)
         return ".".join(elements)
@@ -111,6 +117,10 @@ class GirvelInterpreter(Interpreter):
     def statement_if(self, tree):
         condition, if_block, *else_block = self.visit_children(tree)
         return f"if ({condition}) {if_block}" + ("" if len(else_block) == 0 else f"\nelse {else_block[0]}")
+
+    def statement_loop(self, tree):
+        body, = self.visit_children(tree)
+        return f"while (1) {body}"
 
     operation = ignore
 
@@ -137,6 +147,12 @@ del GirvelInterpreter.if_
 
 setattr(GirvelInterpreter, "return", GirvelInterpreter.return_)
 del GirvelInterpreter.return_
+
+setattr(GirvelInterpreter, "break", GirvelInterpreter.break_)
+del GirvelInterpreter.break_
+
+setattr(GirvelInterpreter, "continue", GirvelInterpreter.continue_)
+del GirvelInterpreter.continue_
 
 
 def transpile(source):

@@ -16,13 +16,16 @@ struct_definition: "struct" CNAME "{" (variable_definition ";")* "}"
 
 block: "{" (statement ";")* expression "}"
 statement_block: "{" (statement ";")* "}"
-statement: expression
-    | variable_definition
+statement: variable_definition
     | variable_assignment
     | variable_declaration
     | return
+    | break
+    | continue
     | statement_block
     | statement_if
+    | statement_loop
+    | call
 expression: block
     | if
     | operation
@@ -34,13 +37,18 @@ expression: block
 variable_definition: CNAME CNAME
 variable_assignment: identifier ASSIGNMENT_OPERATOR expression
 variable_declaration: CNAME identifier "=" expression
+
 return: "return" expression
+break: "break"
+continue: "continue"
 
 identifier: identifier_piece ("." identifier_piece)*
 identifier_piece: CNAME | call
 
 if: "if" expression block "else" block
 statement_if: "if" expression statement_block ("else" statement_block)?
+
+statement_loop: "loop" statement
 
 operation: infix_operation | prefix_operation
 infix_operation: expression INFIX_OPERATOR expression

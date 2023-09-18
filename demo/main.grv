@@ -16,15 +16,11 @@ int max(int a, int b) {
 
 int main() {
     int counter = 1;
-    counter *= 2;
 
-    // else {
-    //     0
-    // }
-    // loop {
-    //     counter = counter * 2;
-    //     if counter <
-    // }
+    loop {
+        counter *= 2;
+        if counter > 10000 { break; };
+    };
 
     printf("Hello, %d!\n", max(3, 4));
     printf("v.x is %d\n", Vector::one().x);
