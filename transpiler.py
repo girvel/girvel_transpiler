@@ -5,6 +5,8 @@ from lark.visitors import Interpreter, v_args, visit_children_decor
 
 parser = Lark(Path("girvel.lark").read_text())
 
+def _indent(code):
+    return code.replace("\n", "\n    ")
 
 class GirvelInterpreter(Interpreter):
     @v_args(True)
@@ -20,7 +22,11 @@ class GirvelInterpreter(Interpreter):
 
     @v_args(True)
     def function_definition(self, signature, block):
-        return f"{self.visit(signature)} {{\n    return {self.visit(block)};\n}}\n"
+        return (
+            f"\n{self.visit(signature)} {{" +
+            _indent(f"\nreturn {self.visit(block)};") +
+            f"\n}}\n"
+        )
 
     @v_args(True)
     def signature(self, return_type, name, arguments):
@@ -30,7 +36,13 @@ class GirvelInterpreter(Interpreter):
         return f"({', '.join(self.visit_children(tree))})"
 
     def block(self, tree):
-        return f"({{ {'; '.join(self.visit_children(tree))}; }})"
+        if len(tree.children) <= 1:
+            expression, = self.visit_children(tree)
+            return f"({expression})"
+
+        return "({{{};\n}})".format(
+            _indent('\n' + ';\n'.join(self.visit_children(tree)))
+        )
 
     def expression(self, tree):
         expression, = self.visit_children(tree)
