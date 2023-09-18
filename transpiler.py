@@ -16,9 +16,10 @@ ignore = v_args(True)(lambda self, value: value if isinstance(value, str) else s
 
 class GirvelInterpreter(Interpreter):
     start = ignore
+    footer = ""
 
     def module(self, tree):
-        return "".join(self.visit_children(tree))
+        return "".join(self.visit_children(tree)) + self.footer
 
     module_element = ignore
 
@@ -27,6 +28,11 @@ class GirvelInterpreter(Interpreter):
         if target.endswith('.grv"'):
             target = target[:-5] + '.c"'
         return f"#include {target}\n"
+
+    @v_args(True)
+    def generic(self, target):
+        self.footer = "\n#endif" + self.footer
+        return f"#ifdef {self.visit(target)}"
 
     @v_args(True)
     def function_definition(self, signature, expression):
@@ -46,7 +52,7 @@ class GirvelInterpreter(Interpreter):
 
     @v_args(True)
     def signature(self, return_type, name, arguments):
-        return f"{return_type} {self.visit(name)}{self.visit(arguments)}"
+        return f"{self.visit(return_type)} {self.visit(name)}{self.visit(arguments)}"
 
     @v_args(True)
     def function_name(self, *elements):
@@ -60,8 +66,15 @@ class GirvelInterpreter(Interpreter):
         return (
             f"\ntypedef struct {{"
             + _indent(f"{self.visit(d)};" for d in variable_definitions) +
-            f"\n}} {name};\n"
+            f"\n}} {self.visit(name)};\n"
         )
+
+    def type_name(self, tree):
+        print('_'.join(self.visit_children(tree)))
+        return '_'.join(self.visit_children(tree))
+
+    def generic_postfix(self, tree):
+        return '_'.join(self.visit_children(tree))
 
     def block(self, tree):
         if len(tree.children) <= 1:

@@ -2,17 +2,23 @@ start: module
 
 module: module_element*
 module_element: include
+    | generic
     | function_definition
     | struct_definition
 
 include: "include" ESCAPED_STRING
 
+generic: "generic" type_name
+
 function_definition: signature expression
-signature: CNAME function_name arguments
-function_name: (CNAME "::")? CNAME
+signature: type_name function_name arguments
+function_name: (type_name "::")? CNAME generic_postfix?
 arguments: "(" variable_definition? ("," variable_definition)* ","? ")"
 
-struct_definition: "struct" CNAME "{" (variable_definition ";")* "}"
+struct_definition: "struct" type_name "{" (variable_definition ";")* "}"
+type_name: CNAME generic_postfix?
+
+generic_postfix: "<" CNAME ("," CNAME)* ">"
 
 block: "{" (statement ";")* expression "}"
 statement_block: "{" (statement ";")* "}"
@@ -34,9 +40,9 @@ expression: block
     | constructor
     | LITERAL
 
-variable_definition: CNAME CNAME
+variable_definition: type_name CNAME
 variable_assignment: identifier ASSIGNMENT_OPERATOR expression
-variable_declaration: CNAME identifier "=" expression
+variable_declaration: type_name identifier "=" expression
 
 return: "return" expression
 break: "break"
@@ -89,7 +95,7 @@ PREFIX_OPERATOR: "-" | "+" | "!" | "~"
 
 call: function_name "(" expression? ("," expression)* ","? ")"
 
-constructor: CNAME "{" expression? ("," expression)* ","? "}"
+constructor: type_name "{" expression? ("," expression)* ","? "}"
 
 LITERAL: SIGNED_INT | ESCAPED_STRING
 

@@ -1,4 +1,6 @@
-struct Vector {
-    int x;
-    int y;
+generic T
+
+struct Vector<T> {
+    T x;
+    T y;
 }

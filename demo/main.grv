@@ -3,7 +3,7 @@ include "./vector.grv"
 // TODO .h files generation
 
 int main() {
-    Vector v = Vector {0, 1};
+    Vector_int v = Vector_int {0, 1};
     printf("v.y is %d\n", v.y);
     0
 }
