@@ -53,13 +53,13 @@ class GirvelInterpreter(Interpreter):
         if target.endswith('.grv"'):
             target = target[:-5] + '.c"'
 
-        return (
-            "\n" +
-            ''.join(f"#define {typevar} {typeval}\n" for typevar, typeval in assignments) +
-            f"#include {target}\n" +
-            ''.join(f"#undef {typevar}" for typevar, _ in assignments) +
-            "\n"
-        )
+        return "".join([
+            "\n",
+            ''.join(f"#define {typevar} {typeval}\n" for typevar, typeval in assignments),
+            f"#include {target}\n",
+            ''.join(f"#undef {typevar}" for typevar, _ in assignments),
+            "\n",
+        ])
 
     def generic_include_assignment(self, tree):
         return self.visit_children(tree)
