@@ -5,5 +5,7 @@ include<T: int> "./vector.grv"
 main: int() => {
     Vector<int> v = Vector<int>::one();
     printf("v.y is %d\n", v.y);
+    char c = '!';
+    printf("%c\n", c);
     0
 }

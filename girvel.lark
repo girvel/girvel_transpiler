@@ -101,12 +101,14 @@ call: function_name "(" expression? ("," expression)* ","? ")"
 
 constructor: type_name "{" expression? ("," expression)* ","? "}"
 
-LITERAL: SIGNED_INT | ESCAPED_STRING
+LITERAL: SIGNED_INT | SIGNED_FLOAT | ESCAPED_STRING | CHAR
+CHAR: "'" /./ "'"
 
 %import common.WS
 %import common.CNAME
 %import common.ESCAPED_STRING
 %import common.SIGNED_INT
+%import common.SIGNED_FLOAT
 %import common.CPP_COMMENT
 %ignore WS
 %ignore CPP_COMMENT
