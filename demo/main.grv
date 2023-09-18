@@ -16,9 +16,8 @@ int max(int a, int b) {
 
 int main() {
     int counter = 1;
-    if counter > 0 {
-        printf("counter is bigger than zero!\n");
-    };
+    counter = counter * 2;
+
     // else {
     //     0
     // }
@@ -29,5 +28,6 @@ int main() {
 
     printf("Hello, %d!\n", max(3, 4));
     printf("v.x is %d\n", Vector::one().x);
+    printf("counter is %d\n", counter);
     0
 }

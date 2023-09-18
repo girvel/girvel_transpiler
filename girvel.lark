@@ -42,8 +42,30 @@ identifier_piece: CNAME | call
 if: "if" expression block "else" block
 statement_if: "if" expression statement_block ("else" statement_block)?
 
-operation: expression INFIX_OPERATOR expression
-INFIX_OPERATOR: ">"
+operation: infix_operation | prefix_operation
+infix_operation: expression INFIX_OPERATOR expression
+prefix_operation: PREFIX_OPERATOR expression
+
+INFIX_OPERATOR: "+"
+    | "-"
+    | "*"
+    | "/"
+    | "%"
+    | "=="
+    | "!="
+    | ">"
+    | "<"
+    | ">="
+    | "<="
+    | "||"
+    | "&&"
+    | "&"
+    | "|"
+    | "^"
+    | ">>"
+    | "<<"
+
+PREFIX_OPERATOR: "-" | "+" | "!" | "~"
 
 call: function_name "(" expression? ("," expression)* ","? ")"
 

@@ -113,7 +113,12 @@ class GirvelInterpreter(Interpreter):
         condition, if_block, *else_block = self.visit_children(tree)
         return f"if ({condition}) {if_block}" + ("" if len(else_block) == 0 else f"\nelse {else_block[0]}")
 
-    def operation(self, tree):
+    operation = ignore
+
+    def infix_operation(self, tree):
+        return " ".join(self.visit_children(tree))
+
+    def prefix_operation(self, tree):
         return " ".join(self.visit_children(tree))
 
     def call(self, tree):
