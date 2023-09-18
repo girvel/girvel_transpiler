@@ -44,9 +44,10 @@ expression: block
     | constructor
     | LITERAL
 
-variable_definition: type_name CNAME
+variable_definition: MUTABILITY_MODIFIER? type_name CNAME
 variable_assignment: identifier ASSIGNMENT_OPERATOR expression
-variable_declaration: type_name identifier "=" expression
+variable_declaration: variable_definition "=" expression
+MUTABILITY_MODIFIER: "mut"
 
 return: "return" expression
 break: "break"

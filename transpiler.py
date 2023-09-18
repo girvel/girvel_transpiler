@@ -29,6 +29,7 @@ class GirvelInterpreter(Interpreter):
     start = ignore
     concats = set()
     footer = ""
+    in_struct = False
 
     def _concat(self, elements):
         if len(elements) == 1:
@@ -102,12 +103,16 @@ class GirvelInterpreter(Interpreter):
     def arguments(self, tree):
         return f"({', '.join(self.visit_children(tree))})"
 
-    @v_args(True)
-    def struct_definition(self, name, *variable_definitions):
+    def struct_definition(self, tree):
+        was_in_struct = self.in_struct
+        self.in_struct = True
+        name, *variable_definitions = self.visit_children(tree)
+        self.in_struct = was_in_struct
+
         return (
             f"\ntypedef struct {{"
-            + _indent(f"{self.visit(d)};" for d in variable_definitions) +
-            f"\n}} {self.visit(name)};\n"
+            + _indent(f"{d};" for d in variable_definitions) +
+            f"\n}} {name};\n"
         )
 
     def type_name(self, tree):
@@ -137,14 +142,19 @@ class GirvelInterpreter(Interpreter):
         return expression
 
     def variable_definition(self, tree):
-        return " ".join(self.visit_children(tree))
+        elements = self.visit_children(tree)
+
+        if len(elements) == 2:
+            return ("" if self.in_struct else "const ") + " ".join(elements)
+
+        return " ".join(elements[1:])
 
     def variable_assignment(self, tree):
         return " ".join(self.visit_children(tree))
 
     def variable_declaration(self, tree):
-        type_, lvalue, rvalue = self.visit_children(tree)
-        return f"{type_} {lvalue} = {rvalue}"
+        lvalue, rvalue = self.visit_children(tree)
+        return f"{lvalue} = {rvalue}"
 
     @v_args(True)
     def return_(self, expression):

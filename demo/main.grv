@@ -3,9 +3,11 @@ include<T: int> "./vector.grv"
 // TODO .h files generation
 
 main: int() => {
-    Vector<int> v = Vector<int>::one();
+    mut Vector<int> v = Vector<int>::one();
     printf("v.y is %d\n", v.y);
-    char c = '!';
-    printf("%c\n", c);
+
+    v = Vector<int> {3, 2};
+    printf("v.y is %d\n", v.y);
+    
     0
 }
