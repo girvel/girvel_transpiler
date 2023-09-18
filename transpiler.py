@@ -1,7 +1,7 @@
 from pathlib import Path
 
-from lark import Lark, Transformer
-from lark.visitors import Interpreter, v_args, visit_children_decor
+from lark import Lark
+from lark.visitors import Interpreter, v_args
 
 parser = Lark(Path("girvel.lark").read_text())
 
