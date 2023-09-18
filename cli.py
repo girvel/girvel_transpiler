@@ -20,21 +20,25 @@ subparsers = parser.add_subparsers()
 
 
 def build(args):
-    path = args.directory / "main.grv"
-    source = path.read_text()
-
-    sys.stderr.write(f"\t{colored('Transpiling', 'green', attrs=['bold'])} {path.parent.name}\n")
-    try:
-        transpiled_code = transpile(source)
-    except UnexpectedCharacters as ex:
-        sys.stderr.write(f"\t{colored('Syntax error', 'red', attrs=['bold'])} {path}:{ex.line}:{ex.column}\n")
-        sys.stderr.write(f"\n{ex}\n")
-        exit(1)
-
     build_dir = args.directory / '.build'
-
     build_dir.mkdir(exist_ok=True)
-    (build_dir / 'main.c').write_text(transpiled_code)
+    os.system(f'rm -r {build_dir}/*')
+
+    entrypoint = args.directory / "main.grv"
+
+    sys.stderr.write(f"\t{colored('Transpiling', 'green', attrs=['bold'])} {args.directory.name}\n")
+
+    for path in args.directory.glob('**/*.grv'):
+        source = path.read_text()
+
+        try:
+            transpiled_code = transpile(source)
+        except UnexpectedCharacters as ex:
+            sys.stderr.write(f"\t{colored('Syntax error', 'red', attrs=['bold'])} {path}:{ex.line}:{ex.column}\n")
+            sys.stderr.write(f"\n{ex}\n")
+            exit(1)
+
+        (build_dir / path.relative_to(args.directory).with_suffix('.c')).write_text(transpiled_code)
 
     sys.stderr.write(f"\t{colored('Running', 'green', attrs=['bold'])} {path.parent.name}\n")
     sys.stderr.write("\n")

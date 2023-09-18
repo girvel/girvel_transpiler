@@ -155,5 +155,5 @@ setattr(GirvelInterpreter, "continue", GirvelInterpreter.continue_)
 del GirvelInterpreter.continue_
 
 
-def transpile(source):
+def transpile(source: str) -> str:
     return GirvelInterpreter().visit(parser.parse(source))

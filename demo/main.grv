@@ -1,29 +1,6 @@
 include "stdio.h"
-
-struct Vector {
-    int x;
-    int y;
-}
-
-Vector Vector::one() {
-    return Vector {1, 1};
-    Vector {0, 0}
-}
-
-int max(int a, int b) {
-    if a > b {a} else {b}
-}
+// include "./vector.grv"
 
 int main() {
-    int counter = 1;
-
-    loop {
-        counter *= 2;
-        if counter > 10000 { break; };
-    };
-
-    printf("Hello, %d!\n", max(3, 4));
-    printf("v.x is %d\n", Vector::one().x);
-    printf("counter is %d\n", counter);
     0
 }
