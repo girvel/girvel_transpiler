@@ -8,7 +8,8 @@ module_element: include
 include: "include" ESCAPED_STRING
 
 function_definition: signature block
-signature: CNAME CNAME arguments
+signature: CNAME function_name arguments
+function_name: (CNAME "::")? CNAME
 arguments: "(" variable_definition? ("," variable_definition)* ","? ")"
 
 struct_definition: "struct" CNAME "{" (variable_definition ";")* "}"
@@ -21,14 +22,15 @@ expression: if | operation | call | identifier | LITERAL
 
 variable_definition: CNAME CNAME
 variable_assignment: identifier "=" expression
-identifier: CNAME ("." CNAME)*
+identifier: identifier_piece ("." identifier_piece)*
+identifier_piece: CNAME | call
 
 if: "if" expression block "else" block
 
 operation: CNAME INFIX_OPERATOR CNAME
 INFIX_OPERATOR: ">"
 
-call: CNAME "(" expression? ("," expression)* ","? ")"
+call: function_name "(" expression? ("," expression)* ","? ")"
 
 LITERAL: SIGNED_INT | ESCAPED_STRING
 

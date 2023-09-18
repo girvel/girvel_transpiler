@@ -5,14 +5,16 @@ struct Vector {
     int y;
 }
 
+int Vector::one() {
+    1
+}
+
 int max(int a, int b) {
     if a > b {a} else {b}
 }
 
 int main() {
     printf("Hello, %d!\n", max(3, 4));
-    Vector v;
-    v.x = 3;
-    printf("v.x is %d\n", v.x);
+    printf("v.x is %d\n", Vector::one());
     0
 }

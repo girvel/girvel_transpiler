@@ -12,7 +12,7 @@ def _indent(code):
 
     return code.replace("\n", "\n    ")
 
-ignore = v_args(True)(lambda self, value: self.visit(value))
+ignore = v_args(True)(lambda self, value: value if isinstance(value, str) else self.visit(value))
 
 class GirvelInterpreter(Interpreter):
     start = ignore
@@ -26,8 +26,9 @@ class GirvelInterpreter(Interpreter):
     def include(self, target):
         return f"#include {target}\n"
 
+    # TODO comments
     @v_args(True)
-    def function_definition(self, signature, block):
+    def function_definition(self, signature, block):  # TODO one-line function definition
         *code, ret = self.visit_children(block)
 
         if len(code) == 0:
@@ -44,7 +45,11 @@ class GirvelInterpreter(Interpreter):
 
     @v_args(True)
     def signature(self, return_type, name, arguments):
-        return f"{return_type} {name}{self.visit(arguments)}"
+        return f"{return_type} {self.visit(name)}{self.visit(arguments)}"
+
+    @v_args(True)
+    def function_name(self, *elements):
+        return "_".join(elements)
 
     def arguments(self, tree):
         return f"({', '.join(self.visit_children(tree))})"
@@ -79,9 +84,11 @@ class GirvelInterpreter(Interpreter):
         lvalue, rvalue = self.visit_children(tree)
         return f"{lvalue} = {rvalue}"
 
-    @v_args(True)
-    def identifier(self, *elements):
+    def identifier(self, tree):
+        elements = self.visit_children(tree)
         return ".".join(elements)
+
+    identifier_piece = ignore
 
     def if_(self, tree):
         condition, if_block, else_block = self.visit_children(tree)
