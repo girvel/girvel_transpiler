@@ -38,7 +38,7 @@ identifier_piece: CNAME | call
 
 if: "if" expression block "else" block
 
-operation: CNAME INFIX_OPERATOR CNAME
+operation: expression INFIX_OPERATOR expression
 INFIX_OPERATOR: ">"
 
 call: function_name "(" expression? ("," expression)* ","? ")"

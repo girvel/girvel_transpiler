@@ -11,14 +11,23 @@ Vector Vector::one() {
 }
 
 int max(int a, int b) {
-    if a > b {a} else {b}
+    if a > 0 {a} else {b}
 }
 
 int main() {
-    int x = 3;
+    // int counter = 1;
+    // if counter > 0 {
+    //     printf("counter is bigger than zero!");
+    // }
+    // else {
+    //     0
+    // }
+    // loop {
+    //     counter = counter * 2;
+    //     if counter <
+    // }
 
     printf("Hello, %d!\n", max(3, 4));
     printf("v.x is %d\n", Vector::one().x);
-    printf("x is %d\n", x);
     0
 }
