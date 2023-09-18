@@ -16,13 +16,13 @@ generic: "generic" CNAME
 
 function_definition: signature expression
 signature: type_name function_name arguments
-function_name: (type_name "::")? CNAME generic_postfix?
+function_name: (type_name "::")? CNAME _generic_postfix?
 arguments: "(" variable_definition? ("," variable_definition)* ","? ")"
 
 struct_definition: "struct" type_name "{" (variable_definition ";")* "}"
-type_name: CNAME generic_postfix?
+type_name: CNAME _generic_postfix?
 
-generic_postfix: "<" CNAME ("," CNAME)* ">"
+_generic_postfix: "<" CNAME ("," CNAME)* ">"
 
 block: "{" (statement ";")* expression "}"
 statement_block: "{" (statement ";")* "}"

@@ -4,3 +4,5 @@ struct Vector<T> {
     T x;
     T y;
 }
+
+Vector<T> Vector::one<T>() Vector<T> {1, 1}

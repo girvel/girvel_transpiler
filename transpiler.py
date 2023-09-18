@@ -30,6 +30,13 @@ class GirvelInterpreter(Interpreter):
     concats = set()
     footer = ""
 
+    def _concat(self, elements):
+        if len(elements) == 1:
+            return elements[0]
+
+        self.concats.add(len(elements))
+        return "GIRVEL_CONCAT{}({})".format(len(elements), ", ".join(elements))
+
     def module(self, tree):
         contents = self.visit_children(tree)
 
@@ -89,34 +96,22 @@ class GirvelInterpreter(Interpreter):
     def signature(self, return_type, name, arguments):
         return f"{self.visit(return_type)} {self.visit(name)}{self.visit(arguments)}"
 
-    @v_args(True)
-    def function_name(self, *elements):
-        return "_".join(elements)
+    def function_name(self, tree):
+        return self._concat(self.visit_children(tree))
 
     def arguments(self, tree):
         return f"({', '.join(self.visit_children(tree))})"
 
     @v_args(True)
     def struct_definition(self, name, *variable_definitions):
-        if len(name.children) == 1:
-            typename, = name.children
-        else:
-            prefix, generics = name.children
-            to_concat = [prefix] + generics.children
-            self.concats.add(len(to_concat))
-            typename = "GIRVEL_CONCAT{}({})".format(len(to_concat), ", ".join(to_concat))
-
         return (
             f"\ntypedef struct {{"
             + _indent(f"{self.visit(d)};" for d in variable_definitions) +
-            f"\n}} {typename};\n"
+            f"\n}} {self.visit(name)};\n"
         )
 
     def type_name(self, tree):
-        return '_'.join(self.visit_children(tree))
-
-    def generic_postfix(self, tree):
-        return '_'.join(self.visit_children(tree))
+        return self._concat(self.visit_children(tree))
 
     def block(self, tree):
         if len(tree.children) <= 1:
