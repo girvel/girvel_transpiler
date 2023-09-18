@@ -1,14 +1,16 @@
-start: WS? function_definition WS?
-function_definition: signature WS? block
-signature: CNAME WS CNAME WS? ("<" WS? CNAME WS? ">" WS?)? arguments
-arguments: "(" WS? var_def WS? ("," WS? var_def WS?)* ")"
+start: function_definition
+function_definition: signature block
+signature: CNAME CNAME arguments
+arguments: "(" var_def ("," var_def)* ")"
 
-block: "{" WS? expression (WS? ";" WS? expression)* WS? "}"
+block: "{" expression (";" expression)* "}"
 expression: if | operation | CNAME
-if: "if" WS expression WS? block (WS? "else" WS? block)?
-operation: CNAME WS? INFIX_OPERATOR WS? CNAME
+if: "if" expression block ("else" block)?
+operation: CNAME INFIX_OPERATOR CNAME
+var_def: CNAME CNAME
+
 INFIX_OPERATOR: ">"
-var_def: CNAME WS CNAME
 
 %import common.WS
 %import common.CNAME
+%ignore WS
