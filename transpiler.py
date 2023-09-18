@@ -1,53 +1,58 @@
 from pathlib import Path
 
 from lark import Lark, Transformer
+from lark.visitors import Interpreter, v_args, visit_children_decor
 
 parser = Lark(Path("girvel.lark").read_text())
 
-class GirvelTransformer(Transformer):
-    def start(self, children):
-        return children[0]
 
-    def module(self, children):
-        return "\n".join(children)
+class GirvelInterpreter(Interpreter):
+    @v_args(True)
+    def start(self, module):
+        return self.visit(module)
 
-    def include(self, children):
-        return f"#include {children[0]}"
+    def module(self, tree):
+        return "\n".join(self.visit_children(tree))
 
-    def function_definition(self, children):
-        signature, block = children
-        return f"{signature} {{\n    return {block};\n}}\n"
+    @v_args(True)
+    def include(self, target):
+        return f"#include {target}"
 
-    def signature(self, children):
-        return_type, name, arguments = children
-        return f"{return_type} {name}{arguments}"
+    @v_args(True)
+    def function_definition(self, signature, block):
+        return f"{self.visit(signature)} {{\n    return {self.visit(block)};\n}}\n"
 
-    def arguments(self, children):
-        return f"({', '.join(children)})"
+    @v_args(True)
+    def signature(self, return_type, name, arguments):
+        return f"{return_type} {name}{self.visit(arguments)}"
 
-    def block(self, children):
-        return f"({{ {'; '.join(children)}; }})"
+    def arguments(self, tree):
+        return f"({', '.join(self.visit_children(tree))})"
 
-    def expression(self, children):
-        return children[0]
+    def block(self, tree):
+        return f"({{ {'; '.join(self.visit_children(tree))}; }})"
 
-    def if_(self, children):
-        condition, if_block, else_block = children
+    def expression(self, tree):
+        expression, = self.visit_children(tree)
+        return expression
+
+    def if_(self, tree):
+        condition, if_block, else_block = self.visit_children(tree)
         return f"(({condition}) ? ({if_block}) : ({else_block}))"
 
-    def variable_definition(self, children):
-        return " ".join(children)
+    def variable_definition(self, tree):
+        return " ".join(self.visit_children(tree))
 
-    def operation(self, children):
-        return " ".join(children)
+    def operation(self, tree):
+        return " ".join(self.visit_children(tree))
 
-    def call(self, children):
-        function, *arguments = children
+    def call(self, tree):
+        function, *arguments = self.visit_children(tree)
         return f"{function}({', '.join(arguments)})"
 
-setattr(GirvelTransformer, "if", GirvelTransformer.if_)
-del GirvelTransformer.if_
+setattr(GirvelInterpreter, "if", GirvelInterpreter.if_)
+del GirvelInterpreter.if_
 
 
 def transpile(source):
-    return GirvelTransformer().transform(parser.parse(source))
+    return GirvelInterpreter().visit(parser.parse(source))

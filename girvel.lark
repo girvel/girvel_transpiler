@@ -1,6 +1,6 @@
 start: module
 
-module: include* function_definition*
+module: (include | function_definition)*
 
 include: "include" ESCAPED_STRING
 
