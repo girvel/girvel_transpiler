@@ -16,7 +16,7 @@ int max(int a, int b) {
 
 int main() {
     int counter = 1;
-    counter = counter * 2;
+    counter *= 2;
 
     // else {
     //     0

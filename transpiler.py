@@ -88,8 +88,7 @@ class GirvelInterpreter(Interpreter):
         return " ".join(self.visit_children(tree))
 
     def variable_assignment(self, tree):
-        lvalue, rvalue = self.visit_children(tree)
-        return f"{lvalue} = {rvalue}"
+        return " ".join(self.visit_children(tree))
 
     def variable_declaration(self, tree):
         type_, lvalue, rvalue = self.visit_children(tree)

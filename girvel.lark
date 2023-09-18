@@ -32,7 +32,7 @@ expression: block
     | LITERAL
 
 variable_definition: CNAME CNAME
-variable_assignment: identifier "=" expression
+variable_assignment: identifier ASSIGNMENT_OPERATOR expression
 variable_declaration: CNAME identifier "=" expression
 return: "return" expression
 
@@ -45,6 +45,18 @@ statement_if: "if" expression statement_block ("else" statement_block)?
 operation: infix_operation | prefix_operation
 infix_operation: expression INFIX_OPERATOR expression
 prefix_operation: PREFIX_OPERATOR expression
+
+ASSIGNMENT_OPERATOR: "="
+    | "+="
+    | "-="
+    | "*="
+    | "/="
+    | "%="
+    | "|="
+    | "&="
+    | "^="
+    | ">>="
+    | "<<="
 
 INFIX_OPERATOR: "+"
     | "-"
