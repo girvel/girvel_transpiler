@@ -6,13 +6,9 @@ struct Vector {
 }
 
 // TODO returns
-Vector Vector::one() {
-    Vector {1, 1}
-}
+Vector Vector::one() Vector {1, 1}
 
-int max(int a, int b) {
-    if a > b {a} else {b}
-}
+int max(int a, int b) if a > b {a} else {b}
 
 int main() {
     printf("Hello, %d!\n", max(3, 4));

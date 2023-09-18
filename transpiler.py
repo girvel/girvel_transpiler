@@ -27,8 +27,8 @@ class GirvelInterpreter(Interpreter):
         return f"#include {target}\n"
 
     @v_args(True)
-    def function_definition(self, signature, block):  # TODO one-line function definition
-        *code, ret = self.visit_children(block)
+    def function_definition(self, signature, expression):  # TODO one-line function definition
+        *code, ret = self.visit_children(expression)
 
         if len(code) == 0:
             block_content = _indent("\nreturn {};".format(ret))

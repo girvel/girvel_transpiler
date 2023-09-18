@@ -7,7 +7,7 @@ module_element: include
 
 include: "include" ESCAPED_STRING
 
-function_definition: signature block
+function_definition: signature expression
 signature: CNAME function_name arguments
 function_name: (CNAME "::")? CNAME
 arguments: "(" variable_definition? ("," variable_definition)* ","? ")"
@@ -18,7 +18,8 @@ block: "{" statement (";" statement)* "}"
 statement: expression
     | variable_definition
     | variable_assignment
-expression: if
+expression: block
+    | if
     | operation
     | call
     | identifier
