@@ -14,11 +14,11 @@ class GirvelInterpreter(Interpreter):
         return self.visit(module)
 
     def module(self, tree):
-        return "\n".join(self.visit_children(tree))
+        return "".join(self.visit_children(tree))
 
     @v_args(True)
     def include(self, target):
-        return f"#include {target}"
+        return f"#include {target}\n"
 
     @v_args(True)
     def function_definition(self, signature, block):
@@ -50,7 +50,7 @@ class GirvelInterpreter(Interpreter):
 
     def if_(self, tree):
         condition, if_block, else_block = self.visit_children(tree)
-        return f"(({condition}) ? ({if_block}) : ({else_block}))"
+        return f"{condition} ? {if_block} : {else_block}"
 
     def variable_definition(self, tree):
         return " ".join(self.visit_children(tree))

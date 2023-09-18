@@ -1,6 +1,10 @@
 include "stdio.h"
 
+int max(int a, int b) {
+    if a > b {a} else {b}
+}
+
 int main() {
-    printf("Hello, world!\n");
+    printf("Hello, %d!\n", max(3, 4));
     0
 }
