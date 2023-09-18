@@ -6,7 +6,7 @@ arguments: "(" variable_definition ("," variable_definition)* ")"
 block: "{" expression (";" expression)* "}"
 expression: if | operation | CNAME
 
-if: "if" expression block ("else" block)?
+if: "if" expression block "else" block
 
 variable_definition: CNAME CNAME
 
