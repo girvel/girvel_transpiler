@@ -4,6 +4,8 @@ from typing import Iterator
 from lark import Lark
 from lark.visitors import Interpreter, v_args
 
+from utils import capital_letters
+
 parser = Lark((Path(__file__).parent / "girvel.lark").read_text())
 
 def _indent(code):
@@ -12,14 +14,31 @@ def _indent(code):
 
     return code.replace("\n", "\n    ")
 
+def _generate_concat_macro(args_n):
+    args_array = [capital_letters[i] for i in range(args_n)]
+
+    return "#define _GIRVEL_CONCAT{n}({args}) {expr}\n".format(
+        n=args_n, args=', '.join(args_array), expr="##_##".join(args_array),
+    ) + "#define GIRVEL_CONCAT{n}({args}) _GIRVEL_CONCAT{n}({args})\n".format(
+        n=args_n, args=', '.join(args_array)
+    )
+
 ignore = v_args(True)(lambda self, value: value if isinstance(value, str) else self.visit(value))
 
 class GirvelInterpreter(Interpreter):
     start = ignore
+    concats = set()
     footer = ""
 
     def module(self, tree):
-        return "".join(self.visit_children(tree)) + self.footer
+        contents = self.visit_children(tree)
+
+        return "".join([
+            "".join(map(_generate_concat_macro, self.concats)),
+            "\n\n" if len(self.concats) > 0 else "",
+            "".join(contents),
+            self.footer,
+        ])
 
     module_element = ignore
 
@@ -81,20 +100,13 @@ class GirvelInterpreter(Interpreter):
     def struct_definition(self, name, *variable_definitions):
         if len(name.children) == 1:
             typename, = name.children
-            def_prefix = ""
         else:
             prefix, generics = name.children
             to_concat = [prefix] + generics.children
-            def_prefix = "#define CONCAT({}) {}\n".format(
-                ', '.join("ABCDEFGHIJKLMNOPQRSTUVWXYZ"[i] for i in range(len(to_concat))),
-                "##_##".join("ABCDEFGHIJKLMNOPQRSTUVWXYZ"[i] for i in range(len(to_concat))),
-            ) + "#define _({}) CONCAT({})\n".format(
-                ', '.join("ABCDEFGHIJKLMNOPQRSTUVWXYZ"[i] for i in range(len(to_concat))),
-                ", ".join("ABCDEFGHIJKLMNOPQRSTUVWXYZ"[i] for i in range(len(to_concat))),
-            )
-            typename = "_({})".format(", ".join(to_concat))
+            self.concats.add(len(to_concat))
+            typename = "GIRVEL_CONCAT{}({})".format(len(to_concat), ", ".join(to_concat))
 
-        return def_prefix + (
+        return (
             f"\ntypedef struct {{"
             + _indent(f"{self.visit(d)};" for d in variable_definitions) +
             f"\n}} {typename};\n"
