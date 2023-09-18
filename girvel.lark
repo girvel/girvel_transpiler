@@ -2,13 +2,17 @@ start: module
 
 module: module_element*
 module_element: include
+    | generic_include
     | generic
     | function_definition
     | struct_definition
 
 include: "include" ESCAPED_STRING
 
-generic: "generic" type_name
+generic_include: "include" "<" generic_include_assignment ("," generic_include_assignment)* ">" ESCAPED_STRING
+generic_include_assignment: CNAME "=" type_name
+
+generic: "generic" CNAME
 
 function_definition: signature expression
 signature: type_name function_name arguments

@@ -29,10 +29,26 @@ class GirvelInterpreter(Interpreter):
             target = target[:-5] + '.c"'
         return f"#include {target}\n"
 
+    def generic_include(self, tree):
+        *assignments, target = self.visit_children(tree)
+        if target.endswith('.grv"'):
+            target = target[:-5] + '.c"'
+
+        return (
+            "\n" +
+            ''.join(f"#define {typevar} {typeval}\n" for typevar, typeval in assignments) +
+            f"#include {target}\n" +
+            ''.join(f"#undef {typevar}" for typevar, _ in assignments) +
+            "\n"
+        )
+
+    def generic_include_assignment(self, tree):
+        return self.visit_children(tree)
+
     @v_args(True)
     def generic(self, target):
         self.footer = "\n#endif" + self.footer
-        return f"#ifdef {self.visit(target)}"
+        return f"#ifdef {target}\n"
 
     @v_args(True)
     def function_definition(self, signature, expression):
@@ -63,14 +79,28 @@ class GirvelInterpreter(Interpreter):
 
     @v_args(True)
     def struct_definition(self, name, *variable_definitions):
-        return (
+        if len(name.children) == 1:
+            typename, = name.children
+            def_prefix = ""
+        else:
+            prefix, generics = name.children
+            to_concat = [prefix] + generics.children
+            def_prefix = "#define CONCAT({}) {}\n".format(
+                ', '.join("ABCDEFGHIJKLMNOPQRSTUVWXYZ"[i] for i in range(len(to_concat))),
+                "##_##".join("ABCDEFGHIJKLMNOPQRSTUVWXYZ"[i] for i in range(len(to_concat))),
+            ) + "#define _({}) CONCAT({})\n".format(
+                ', '.join("ABCDEFGHIJKLMNOPQRSTUVWXYZ"[i] for i in range(len(to_concat))),
+                ", ".join("ABCDEFGHIJKLMNOPQRSTUVWXYZ"[i] for i in range(len(to_concat))),
+            )
+            typename = "_({})".format(", ".join(to_concat))
+
+        return def_prefix + (
             f"\ntypedef struct {{"
             + _indent(f"{self.visit(d)};" for d in variable_definitions) +
-            f"\n}} {self.visit(name)};\n"
+            f"\n}} {typename};\n"
         )
 
     def type_name(self, tree):
-        print('_'.join(self.visit_children(tree)))
         return '_'.join(self.visit_children(tree))
 
     def generic_postfix(self, tree):
