@@ -1,7 +1,7 @@
 include "stdio.h"
 
 int max(int a, int b) {
-    if a > b {a} else {b}
+    if a > b {a} else {}
 }
 
 int main() {
