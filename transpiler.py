@@ -70,6 +70,14 @@ class GirvelInterpreter(Interpreter):
             _indent('\n' + ';\n'.join(self.visit_children(tree)))
         )
 
+    def statement_block(self, tree):
+        statements = self.visit_children(tree)
+        return (
+            "{"
+            + _indent(f"{s};" for s in statements) +
+            "\n}"
+        )
+
     statement = ignore
 
     def expression(self, tree):
@@ -100,6 +108,10 @@ class GirvelInterpreter(Interpreter):
     def if_(self, tree):
         condition, if_block, else_block = self.visit_children(tree)
         return f"{condition} ? {if_block} : {else_block}"
+
+    def statement_if(self, tree):
+        condition, if_block, *else_block = self.visit_children(tree)
+        return f"if ({condition}) {if_block}" + ("" if len(else_block) == 0 else f"\nelse {else_block[0]}")
 
     def operation(self, tree):
         return " ".join(self.visit_children(tree))

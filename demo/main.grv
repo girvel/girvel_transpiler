@@ -11,14 +11,14 @@ Vector Vector::one() {
 }
 
 int max(int a, int b) {
-    if a > 0 {a} else {b}
+    if a > b {a} else {b}
 }
 
 int main() {
-    // int counter = 1;
-    // if counter > 0 {
-    //     printf("counter is bigger than zero!");
-    // }
+    int counter = 1;
+    if counter > 0 {
+        printf("counter is bigger than zero!\n");
+    };
     // else {
     //     0
     // }

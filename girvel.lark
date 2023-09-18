@@ -15,11 +15,14 @@ arguments: "(" variable_definition? ("," variable_definition)* ","? ")"
 struct_definition: "struct" CNAME "{" (variable_definition ";")* "}"
 
 block: "{" (statement ";")* expression "}"
+statement_block: "{" (statement ";")* "}"
 statement: expression
     | variable_definition
     | variable_assignment
     | variable_declaration
     | return
+    | statement_block
+    | statement_if
 expression: block
     | if
     | operation
@@ -37,6 +40,7 @@ identifier: identifier_piece ("." identifier_piece)*
 identifier_piece: CNAME | call
 
 if: "if" expression block "else" block
+statement_if: "if" expression statement_block ("else" statement_block)?
 
 operation: expression INFIX_OPERATOR expression
 INFIX_OPERATOR: ">"
