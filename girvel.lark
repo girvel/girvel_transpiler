@@ -14,10 +14,11 @@ arguments: "(" variable_definition? ("," variable_definition)* ","? ")"
 
 struct_definition: "struct" CNAME "{" (variable_definition ";")* "}"
 
-block: "{" statement (";" statement)* "}"
+block: "{" (statement ";")* expression "}"
 statement: expression
     | variable_definition
     | variable_assignment
+    | return
 expression: block
     | if
     | operation
@@ -28,6 +29,8 @@ expression: block
 
 variable_definition: CNAME CNAME
 variable_assignment: identifier "=" expression
+return: "return" expression
+
 identifier: identifier_piece ("." identifier_piece)*
 identifier_piece: CNAME | call
 

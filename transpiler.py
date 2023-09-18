@@ -83,6 +83,10 @@ class GirvelInterpreter(Interpreter):
         lvalue, rvalue = self.visit_children(tree)
         return f"{lvalue} = {rvalue}"
 
+    @v_args(True)
+    def return_(self, expression):
+        return f"return {self.visit(expression)}"
+
     def identifier(self, tree):
         elements = self.visit_children(tree)
         return ".".join(elements)
@@ -110,6 +114,9 @@ class GirvelInterpreter(Interpreter):
 
 setattr(GirvelInterpreter, "if", GirvelInterpreter.if_)
 del GirvelInterpreter.if_
+
+setattr(GirvelInterpreter, "return", GirvelInterpreter.return_)
+del GirvelInterpreter.return_
 
 
 def transpile(source):
