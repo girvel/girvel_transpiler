@@ -1,18 +1,29 @@
-start: function_definition
+start: module
+
+module: include* function_definition*
+
+include: "include" ESCAPED_STRING
+
 function_definition: signature block
 signature: CNAME CNAME arguments
-arguments: "(" variable_definition ("," variable_definition)* ")"
-
-block: "{" expression (";" expression)* "}"
-expression: if | operation | CNAME
-
-if: "if" expression block "else" block
+arguments: "(" variable_definition? ("," variable_definition)* ","? ")"
 
 variable_definition: CNAME CNAME
+
+block: "{" expression (";" expression)* "}"
+expression: if | operation | call | CNAME | LITERAL
+
+if: "if" expression block "else" block
 
 operation: CNAME INFIX_OPERATOR CNAME
 INFIX_OPERATOR: ">"
 
+call: CNAME "(" expression? ("," expression)* ","? ")"
+
+LITERAL: SIGNED_INT | ESCAPED_STRING
+
 %import common.WS
 %import common.CNAME
+%import common.ESCAPED_STRING
+%import common.SIGNED_INT
 %ignore WS
