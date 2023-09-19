@@ -99,7 +99,7 @@ INFIX_OPERATOR: "+"
     | ">>"
     | "<<"
 
-PREFIX_OPERATOR: "-" | "+" | "!" | "~"
+PREFIX_OPERATOR: "-" | "+" | "!" | "~" | "&" | "*"
 
 call: function_name "(" expression? ("," expression)* ","? ")"
 

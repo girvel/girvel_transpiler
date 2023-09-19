@@ -1,14 +1,11 @@
 include "stdio.h"
 include "std/implicit.grv"
-include<T: i8> "./vector.grv"
 // TODO .h files generation
 
-main: int() => {
-    mut Vector<i8> v = Vector<i8>::one();
-    printf("v.y is %d\n", v.y);
-
-    v = Vector<i8> {3, 2};
-    printf("v.y is %d\n", v.y);
-
+main: i8() => {
+    mut i32 test_integer;
+    printf("x = ");
+    scanf("%d", &test_integer);
+    printf("2x = %d\n", test_integer * 2);
     0
 }
