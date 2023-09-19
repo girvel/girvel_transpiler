@@ -191,10 +191,10 @@ class GirvelInterpreter(Interpreter):
     operation = ignore
 
     def infix_operation(self, tree):
-        return "".join(self.visit_children(tree))
+        return " ".join(self.visit_children(tree))
 
     def prefix_operation(self, tree):
-        return " ".join(self.visit_children(tree))
+        return "".join(self.visit_children(tree))
 
     def call(self, tree):
         function, *arguments = self.visit_children(tree)
