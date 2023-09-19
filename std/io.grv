@@ -1,0 +1,25 @@
+include "stdio.h"
+
+i8::scan: i8() => {
+	mut i8 result;
+	scanf("%hhd", &result);
+	result
+}
+
+i16::scan: i16() => {
+	mut i16 result;
+	scanf("%hd", &result);
+	result
+}
+
+i32::scan: i32() => {
+	mut i32 result;
+	scanf("%d", &result);
+	result
+}
+
+i64::scan: i64() => {
+	mut i64 result;
+	scanf("%ld", &result);
+	result
+}

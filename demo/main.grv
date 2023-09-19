@@ -1,11 +1,11 @@
 include "stdio.h"
 include "std/implicit.grv"
+include "std/io.grv"
 // TODO .h files generation
 
 main: i8() => {
-    mut i32 test_integer;
     printf("x = ");
-    scanf("%d", &test_integer);
+    mut i8 test_integer = i8::scan();
     printf("2x = %d\n", test_integer * 2);
     0
 }
