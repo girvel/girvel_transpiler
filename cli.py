@@ -1,3 +1,4 @@
+import shutil
 import sys
 from argparse import ArgumentParser
 
@@ -22,9 +23,11 @@ subparsers = parser.add_subparsers()
 def build(args):
     build_dir = args.directory / '.build'
     build_dir.mkdir(exist_ok=True)
-    os.system(f'rm -r {build_dir}/*')
+    os.system(f'rm -rf {build_dir}/*')
 
     entrypoint = args.directory / "main.grv"
+    os.system(f'rm -rf {args.directory / "std"}')
+    shutil.copytree(Path(__file__).parent / "std", args.directory / "std")
 
     sys.stderr.write(f"\t{colored('Transpiling', 'green', attrs=['bold'])} {args.directory.name}\n")
 
@@ -38,12 +41,15 @@ def build(args):
             sys.stderr.write(f"\n{ex}\n")
             exit(1)
 
-        (build_dir / path.relative_to(args.directory).with_suffix('.c')).write_text(transpiled_code)
+        write_path = build_dir / path.relative_to(args.directory).with_suffix('.c')
+        write_path.parent.mkdir(exist_ok=True)
+        write_path.write_text(transpiled_code)
 
     sys.stderr.write(f"\t{colored('Running', 'green', attrs=['bold'])} {path.parent.name}\n")
     sys.stderr.write("\n")
 
     os.system(f'gcc -std=c11 {build_dir / "main.c"}')
+    os.system(f'rm -rf {args.directory / "std"}')
 
 parser_run = subparsers.add_parser("build", help="Build an executable file starting from main.grv in given directory")
 parser_run.add_argument("directory", default=".", nargs="?", type=Path, help="directory to build")

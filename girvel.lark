@@ -6,6 +6,7 @@ module_element: include
     | generic
     | function_definition
     | struct_definition
+    | alias_definition
 
 include: "include" ESCAPED_STRING
 
@@ -23,6 +24,8 @@ struct_definition: type_name ":" "struct" "{" (variable_definition ";")* "}"
 type_name: CNAME _generic_postfix?
 
 _generic_postfix: "<" CNAME ("," CNAME)* ">"
+
+alias_definition: CNAME ":" type_name
 
 block: "{" (statement ";")* expression "}"
 statement_block: "{" (statement ";")* "}"

@@ -118,6 +118,10 @@ class GirvelInterpreter(Interpreter):
     def type_name(self, tree):
         return self._concat(self.visit_children(tree))
 
+    def alias_definition(self, tree):
+        alias, value = self.visit_children(tree)
+        return f"\ntypedef {value} {alias};\n"
+
     def block(self, tree):
         if len(tree.children) <= 1:
             expression, = self.visit_children(tree)
