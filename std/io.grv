@@ -1,25 +1,21 @@
 include "stdio.h"
 
-i8::scan: i8() => {
-	mut i8 result;
-	scanf("%hhd", &result);
-	result
-}
+include<T: i8, Format: "%hhd"> "./io_generic.grv"
+include<T: i16, Format: "%hd"> "./io_generic.grv"
+include<T: i32, Format: "%d"> "./io_generic.grv"
+include<T: i64, Format: "%ld"> "./io_generic.grv"
 
-i16::scan: i16() => {
-	mut i16 result;
-	scanf("%hd", &result);
-	result
-}
+// TODO 2.0 implementation
+// DefineScan!: generic<T, Format> {
+//     T::scan: T() => {
+//         mut T result;
+//         scanf(Format, &result);
+//         result
+//     }
+// }
+// 
+// DefineScan!<i8, "%hhd">
+// DefineScan!<i16, "%hd">
+// DefineScan!<i32, "%d">
+// DefineScan!<i64, "%ld">
 
-i32::scan: i32() => {
-	mut i32 result;
-	scanf("%d", &result);
-	result
-}
-
-i64::scan: i64() => {
-	mut i64 result;
-	scanf("%ld", &result);
-	result
-}

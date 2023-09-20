@@ -65,7 +65,7 @@ class GirvelInterpreter(Interpreter):
             "\n",
             ''.join(f"#define {typevar} {typeval}\n" for typevar, typeval in assignments),
             f"#include {target}\n",
-            ''.join(f"#undef {typevar}" for typevar, _ in assignments),
+            ''.join(f"#undef {typevar}\n" for typevar, _ in assignments),
             "\n",
         ])
 

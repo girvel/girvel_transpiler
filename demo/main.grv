@@ -1,7 +1,9 @@
 include "stdio.h"
-include "std/implicit.grv"
-include "std/io.grv"
+include "girvel/implicit.grv"
+include "girvel/io.grv"
 // TODO .h files generation
+
+// max!: <a, b> => if a > b {a} else {b}
 
 main: i8() => {
     printf("x = ");

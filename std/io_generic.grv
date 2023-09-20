@@ -1,0 +1,8 @@
+generic T
+generic Format
+
+T::scan: T() => {
+    mut T result;
+    scanf(Format, &result);
+    result
+}

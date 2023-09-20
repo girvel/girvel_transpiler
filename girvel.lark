@@ -11,7 +11,7 @@ module_element: include
 include: "include" ESCAPED_STRING
 
 generic_include: "include" "<" generic_include_assignment ("," generic_include_assignment)* ">" ESCAPED_STRING
-generic_include_assignment: CNAME ":" type_name
+generic_include_assignment: CNAME ":" (type_name | statement | expression)
 
 generic: "generic" CNAME
 

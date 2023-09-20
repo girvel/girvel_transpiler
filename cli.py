@@ -26,8 +26,10 @@ def build(args):
     os.system(f'rm -rf {build_dir}/*')
 
     entrypoint = args.directory / "main.grv"
-    os.system(f'rm -rf {args.directory / "std"}')
-    shutil.copytree(Path(__file__).parent / "std", args.directory / "std")
+
+    std_tmp_path = args.directory / "girvel"
+    os.system(f'rm -rf {std_tmp_path}')
+    shutil.copytree(Path(__file__).parent / "std", std_tmp_path)
 
     sys.stderr.write(f"\t{colored('Transpiling', 'green', attrs=['bold'])} {args.directory.name}\n")
 
@@ -49,7 +51,7 @@ def build(args):
     sys.stderr.write("\n")
 
     os.system(f'gcc -std=c11 {build_dir / "main.c"}')
-    os.system(f'rm -rf {args.directory / "std"}')
+    os.system(f'rm -rf {std_tmp_path}')
 
 parser_run = subparsers.add_parser("build", help="Build an executable file starting from main.grv in given directory")
 parser_run.add_argument("directory", default=".", nargs="?", type=Path, help="directory to build")
