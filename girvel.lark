@@ -45,7 +45,7 @@ expression: block
     | call
     | identifier
     | constructor
-    | LITERAL
+    | _literal
 
 variable_definition: MUTABILITY_MODIFIER? type_name CNAME
 variable_assignment: identifier ASSIGNMENT_OPERATOR expression
@@ -105,8 +105,11 @@ call: function_name "(" expression? ("," expression)* ","? ")"
 
 constructor: type_name "{" expression? ("," expression)* ","? "}"
 
-LITERAL: SIGNED_INT | SIGNED_FLOAT | ESCAPED_STRING | CHAR
-CHAR: "'" /./ "'"
+_literal: integer_literal | float_literal | string_literal | character_literal
+integer_literal: SIGNED_INT
+float_literal: SIGNED_FLOAT
+string_literal: ESCAPED_STRING
+character_literal: "'" /./ "'"
 
 %import common.WS
 %import common.CNAME

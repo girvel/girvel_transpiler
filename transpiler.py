@@ -1,9 +1,11 @@
+import sys
 from pathlib import Path
 from typing import Iterator
 
 from lark import Lark
 from lark.visitors import Interpreter, v_args
 
+from syntax.parser import girvel_parser
 from utils import capital_letters
 
 parser = Lark((Path(__file__).parent / "girvel.lark").read_text())
@@ -222,4 +224,6 @@ del GirvelInterpreter.continue_
 
 
 def transpile(source: str) -> str:
-    return GirvelInterpreter().visit(parser.parse(source))
+    print(girvel_parser.transform(parser.parse(source)))
+    # return GirvelInterpreter().visit(parser.parse(source))
+    return ""
